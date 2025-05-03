@@ -7,6 +7,7 @@
 - [ ] **RF - 05**: O Grafana deve apresentar os dados monitorados de forma visual em um dashboard customizado.  
 - [ ] **RF - 06**: O projeto deve utilizar integração contínua (CI) e entrega contínua (CD) via GitHub Actions.  
 - [ ] **RF - 07**: Todos os serviços (API, Prometheus, Grafana, script) devem ser containerizados e orquestrados via Docker Compose.  
+- [ ] **RF - 08**: O sistema deve possuir uma interface web baseada em Django para o usuário configurar os parâmetros de envio de requisições (frequência, destino, modo de simulação de falha).
 
 # Requisitos Não Funcionais
 
