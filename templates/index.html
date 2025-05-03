@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Request Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Azure Request Manager</h1>
+            <p>Configure automated requests to your Azure API with customizable failure simulation</p>
+        </header>
+        
+        <main>
+            {% if request.args.get('updated') %}
+                <div class="alert success">
+                    Configuration updated successfully!
+                </div>
+            {% endif %}
+            
+            {% if error %}
+                <div class="alert error">
+                    {{ error }}
+                </div>
+            {% endif %}
+            
+            <section class="config-form">
+                <h2>Request Configuration</h2>
+                <form action="/config" method="post">
+                    <div class="form-group">
+                        <label for="api_url">API Endpoint URL</label>
+                        <input type="url" id="api_url" name="api_url" value="{{ config.api_url }}" required>
+                        <small>The full URL of the API endpoint to send requests to</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="interval_seconds">Request Interval (seconds)</label>
+                        <input type="number" id="interval_seconds" name="interval_seconds" min="1" max="3600" value="{{ config.interval_seconds }}" required>
+                        <small>How often to send requests (1-3600 seconds)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="failure_rate">Failure Rate (%)</label>
+                        <input type="number" id="failure_rate" name="failure_rate" min="0" max="100" step="0.1" value="{{ config.failure_rate }}" required>
+                        <small>Percentage of requests that should simulate failures (0-100)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Failure Modes</label>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="failure_modes" value="timeout" {% if 'timeout' in config.failure_modes %}checked{% endif %}>
+                                Timeout
+                            </label>
+                            <label>
+                                <input type="checkbox" name="failure_modes" value="500" {% if '500' in config.failure_modes %}checked{% endif %}>
+                                HTTP 500 Error
+                            </label>
+                        </div>
+                        <small>Types of failures to simulate</small>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="submit" class="btn primary">Save Configuration</button>
+                    </div>
+                </form>
+            </section>
+            
+            <section class="metrics-links">
+                <h2>Monitoring Links</h2>
+                <div class="links-grid">
+                    <a href="http://localhost:8001/metrics" class="btn secondary" target="_blank">View Raw Metrics</a>
+                    <a href="http://localhost:9090" class="btn secondary" target="_blank">Prometheus</a>
+                    <a href="http://localhost:3000" class="btn secondary" target="_blank">Grafana Dashboard</a>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Azure Request Manager | <a href="https://github.com/92username/azure-request-manager" target="_blank">GitHub Repo</a></p>
+        </footer>
+    </div>
+</body>
+</html>

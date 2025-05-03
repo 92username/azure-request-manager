@@ -1,0 +1,9 @@
+{
+    "api_url": "http://191.234.214.44:8000",
+    "interval_seconds": 5,
+    "failure_rate": 3.0,
+    "failure_modes": [
+        "timeout",
+        "500"
+    ]
+}
