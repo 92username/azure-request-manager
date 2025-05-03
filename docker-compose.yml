@@ -12,6 +12,10 @@ services:
       - ./config.json:/app/config.json
     environment:
       - FLASK_ENV=production
+      - API_URL=${API_URL}
+      - REQUEST_INTERVAL=${REQUEST_INTERVAL}
+      - FAILURE_RATE=${FAILURE_RATE}
+      - FAILURE_MODES=${FAILURE_MODES}
     networks:
       - azure-request-manager
     restart: unless-stopped
@@ -26,9 +30,34 @@ services:
     volumes:
       - ./config.json:/app/config.json
       - ./logs:/app/logs
+    environment:
+      - API_URL=${API_URL}
+      - REQUEST_INTERVAL=${REQUEST_INTERVAL}
+      - FAILURE_RATE=${FAILURE_RATE}
+      - FAILURE_MODES=${FAILURE_MODES}
     networks:
       - azure-request-manager
     restart: unless-stopped
+
+  # Black code formatter service
+  black:
+    image: python:3.9-slim
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: bash -c "pip install black && black --line-length 88 --target-version py39 --exclude '/(\.git|\.venv|venv|env)/' /app/ --force-exclude '/app/node_modules/' --safe"
+    networks:
+      - azure-request-manager
+
+  # Ruff linter service
+  ruff:
+    image: python:3.9-slim
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: bash -c "pip install ruff && ruff check --fix /app"
+    networks:
+      - azure-request-manager
 
   # Prometheus for metrics collection
   prometheus:
@@ -56,8 +85,8 @@ services:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
     networks:
       - azure-request-manager

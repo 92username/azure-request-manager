@@ -6,6 +6,10 @@ import logging
 import threading
 import requests
 from prometheus_client import start_http_server, Counter, Histogram
+from dotenv import load_dotenv
+
+# Carregar variáveis de ambiente do arquivo .env
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(
@@ -51,6 +55,15 @@ def load_config():
             "failure_modes": ["timeout", "500"],
         }
 
+def get_config():
+    """Get configuration with environment variables fallback."""
+    config = load_config()
+    return {
+        "api_url": os.getenv("API_URL") or config.get("api_url", "https://example.com/api"),
+        "interval_seconds": int(os.getenv("REQUEST_INTERVAL") or config.get("interval_seconds", 30)),
+        "failure_rate": int(os.getenv("FAILURE_RATE") or config.get("failure_rate", 10)),
+        "failure_modes": os.getenv("FAILURE_MODES", "").split(",") if os.getenv("FAILURE_MODES") else config.get("failure_modes", ["timeout", "500"])
+    }
 
 def should_simulate_failure(failure_rate):
     """Determine if this request should simulate a failure based on configured rate."""
@@ -131,7 +144,7 @@ def make_request(url, failure_rate, failure_modes):
 def request_loop():
     """Main loop that sends requests based on the configuration."""
     while True:
-        config = load_config()
+        config = get_config()
 
         api_url = config.get("api_url", "https://example.com/api")
         interval = config.get("interval_seconds", 30)
