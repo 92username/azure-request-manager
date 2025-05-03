@@ -19,6 +19,9 @@ app = Flask(__name__)
 
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 
+# URL fixa para testes
+FIXED_API_URL = "http://191.234.214.44:8000"
+
 
 def load_config():
     """Load configuration from config.json or create default if it doesn't exist."""
@@ -28,7 +31,7 @@ def load_config():
                 return json.load(f)
         else:
             default_config = {
-                "api_url": "https://example.com/api",
+                "api_url": FIXED_API_URL,
                 "interval_seconds": 30,
                 "failure_rate": 10,
                 "failure_modes": ["timeout", "500"],
@@ -39,7 +42,7 @@ def load_config():
     except Exception as e:
         logger.error(f"Error loading config: {e}")
         return {
-            "api_url": "https://example.com/api",
+            "api_url": FIXED_API_URL,
             "interval_seconds": 30,
             "failure_rate": 10,
             "failure_modes": ["timeout", "500"],
@@ -49,6 +52,9 @@ def load_config():
 def save_config(config):
     """Save configuration to config.json."""
     try:
+        # Garantir que a API_URL sempre seja a fixa, independentemente da configuração salva
+        config["api_url"] = FIXED_API_URL
+
         with open(CONFIG_PATH, "w") as f:
             json.dump(config, f, indent=4)
         return True
@@ -60,10 +66,18 @@ def save_config(config):
 def get_config():
     config = load_config()
     return {
-        "api_url": os.getenv("API_URL") or config.get("api_url", "https://example.com/api"),
-        "interval_seconds": int(os.getenv("REQUEST_INTERVAL") or config.get("interval_seconds", 30)),
-        "failure_rate": int(os.getenv("FAILURE_RATE") or config.get("failure_rate", 10)),
-        "failure_modes": os.getenv("FAILURE_MODES", "").split(",") if os.getenv("FAILURE_MODES") else config.get("failure_modes", ["timeout", "500"])
+        "api_url": FIXED_API_URL,  # Sempre retorna a URL fixa
+        "interval_seconds": int(
+            os.getenv("REQUEST_INTERVAL") or config.get("interval_seconds", 30)
+        ),
+        "failure_rate": int(
+            os.getenv("FAILURE_RATE") or config.get("failure_rate", 10)
+        ),
+        "failure_modes": (
+            os.getenv("FAILURE_MODES", "").split(",")
+            if os.getenv("FAILURE_MODES")
+            else config.get("failure_modes", ["timeout", "500"])
+        ),
     }
 
 
@@ -79,7 +93,7 @@ def update_config():
     """Update the configuration based on form data."""
     try:
         # Extract form data
-        api_url = request.form.get("api_url")
+        # API URL é fixa, ignoramos a entrada do usuário
         interval_seconds = int(request.form.get("interval_seconds", 30))
         failure_rate = float(request.form.get("failure_rate", 0))
 
@@ -87,11 +101,6 @@ def update_config():
         failure_modes = request.form.getlist("failure_modes")
 
         # Validate inputs
-        if not api_url:
-            return render_template(
-                "index.html", error="API URL is required", config=get_config()
-            )
-
         if interval_seconds < 1:
             return render_template(
                 "index.html",
@@ -115,7 +124,7 @@ def update_config():
 
         # Create new config
         new_config = {
-            "api_url": api_url,
+            "api_url": FIXED_API_URL,  # Sempre usamos a URL fixa
             "interval_seconds": interval_seconds,
             "failure_rate": failure_rate,
             "failure_modes": failure_modes,
