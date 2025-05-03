@@ -11,7 +11,7 @@ def index(request):
         config = form.cleaned_data
 
         # Montar a URL da Azure
-        base_url = "http://191.234.214.44"
+        base_url = "http://191.234.214.44:8000"
         rota = config['rota']
         if config['erro_simulado']:
             rota = "/api/v1/status/500"  # Simulação de erro
