@@ -1,0 +1,10 @@
+2025-05-03 21:13:23,693 - azure_requester - INFO - Servidor de métricas iniciado na porta 8001
+2025-05-03 21:13:23,693 - azure_requester - INFO - API URL: http://191.234.214.44:8000
+2025-05-03 21:13:23,693 - azure_requester - INFO - Intervalo entre requisições: 30s
+2025-05-03 21:13:23,693 - azure_requester - INFO - Taxa de falhas: 10%
+2025-05-03 21:13:23,693 - azure_requester - INFO - Modos de falha: ['timeout', '500']
+2025-05-03 21:13:23,726 - azure_requester - ERROR - Erro na requisição: 404 - http://191.234.214.44:8000/api/resource
+2025-05-03 21:13:53,759 - azure_requester - ERROR - Erro na requisição: 404 - http://191.234.214.44:8000/api/resource
+2025-05-03 21:14:23,793 - azure_requester - ERROR - Erro na requisição: 404 - http://191.234.214.44:8000/api/resource
+2025-05-03 21:14:53,826 - azure_requester - ERROR - Erro na requisição: 404 - http://191.234.214.44:8000/api/resource
+2025-05-03 21:15:23,859 - azure_requester - ERROR - Erro na requisição: 404 - http://191.234.214.44:8000/api/resource
