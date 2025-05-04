@@ -1,6 +1,6 @@
 {
     "api_url": "http://191.234.214.44:8000",
-    "interval_seconds": 1,
+    "interval_seconds": 30,
     "failure_rate": 10.0,
     "failure_modes": [
         "timeout",
