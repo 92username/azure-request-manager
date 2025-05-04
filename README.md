@@ -2,7 +2,7 @@
 
 **A lightweight, modular application for simulating HTTP traffic to an Azure-hosted API**, with support for configurable failure simulation, metrics visualization, and containerized deployment.
 
-## 📌 Overview
+## Overview
 
 The Azure Request Manager is designed to test and monitor APIs running in Azure VMs. It generates configurable HTTP traffic with the ability to simulate failures (timeouts, HTTP 500 errors) at specified rates, making it ideal for testing resilience and observability setups.
 
@@ -12,7 +12,7 @@ The system includes:
 - Complete monitoring stack with Prometheus and Grafana
 - CI/CD integration via GitHub Actions
 
-## 🚀 Features
+## Features
 
 - ✅ Configurable HTTP traffic generation
 - ✅ Failure simulation (timeouts, HTTP 500 errors)
@@ -22,7 +22,7 @@ The system includes:
 - ✅ Containerized deployment with Docker Compose
 - ✅ CI/CD workflow with GitHub Actions
 
-## 🏗️ Architecture
+## Architecture
 
 The application consists of the following components:
 
