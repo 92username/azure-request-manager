@@ -1,5 +1,7 @@
 # Azure Request Manager
 
+##  🚧 Under development 🚧
+
 **A lightweight, modular application for simulating HTTP traffic to an Azure-hosted API**, with support for configurable failure simulation, metrics visualization, and containerized deployment.
 
 ## Overview
